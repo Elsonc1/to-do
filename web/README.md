@@ -2,7 +2,7 @@
 
 Interface web desenvolvida com Nuxt 4 e SSR para gestão de tarefas.
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Nuxt 4** - Framework Vue.js com SSR
 - **Vue 3** - Framework JavaScript reativo
@@ -10,27 +10,27 @@ Interface web desenvolvida com Nuxt 4 e SSR para gestão de tarefas.
 - **Tailwind CSS** - Framework CSS utilitário
 - **Docker** - Containerização da aplicação
 
-## 📋 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 web/
-├── components/       # Componentes Vue reutilizáveis
+├── components/
 │   ├── TaskCard.vue
 │   └── TaskModal.vue
-├── composables/      # Composables (lógica reutilizável)
+├── composables/
 │   └── useTasks.ts
-├── pages/            # Páginas da aplicação
+├── pages/
 │   └── index.vue
-├── layouts/          # Layouts
+├── layouts/
 │   └── default.vue
-├── assets/           # Assets estáticos
+├── assets/
 │   └── css/
 │       └── main.css
 ├── Dockerfile
 └── nuxt.config.ts
 ```
 
-## 🔧 Instalação e Configuração
+## Instalação e Configuração
 
 ### Pré-requisitos
 
@@ -95,7 +95,7 @@ web/
    docker run -p 3000:3000 --env-file .env todo-web
    ```
 
-## 🌐 Acessando a Aplicação
+## Acessando a Aplicação
 
 Após iniciar a aplicação, acesse:
 
@@ -103,24 +103,24 @@ Após iniciar a aplicação, acesse:
 http://localhost:3000
 ```
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-- ✅ Listagem de tarefas
-- ✅ Cadastro de novas tarefas
-- ✅ Edição de tarefas existentes
-- ✅ Alteração de status (pendente, em andamento, concluída)
-- ✅ Exclusão de tarefas
-- ✅ Filtros por status
-- ✅ Interface responsiva e moderna
+- Listagem de tarefas
+- Cadastro de novas tarefas
+- Edição de tarefas existentes
+- Alteração de status (pendente, em andamento, concluída)
+- Exclusão de tarefas
+- Filtros por status
+- Interface responsiva e moderna
 
-## 🛠️ Scripts Disponíveis
+## Scripts Disponíveis
 
 - `npm run dev` - Inicia o servidor de desenvolvimento com hot-reload
 - `npm run build` - Compila a aplicação para produção
 - `npm run generate` - Gera uma versão estática
 - `npm run preview` - Preview da versão de produção
 
-## 📝 Observações
+## Observações
 
 - A aplicação utiliza Server-Side Rendering (SSR) por padrão
 - A URL da API backend é configurável através da variável `API_BASE_URL`

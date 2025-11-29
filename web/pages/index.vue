@@ -20,7 +20,6 @@
           </div>
         </div>
 
-        <!-- Busca -->
         <div class="mb-4">
           <input
             v-model="searchTerm"
@@ -31,7 +30,6 @@
           />
         </div>
 
-        <!-- Filtros -->
         <div class="mb-6 flex gap-2">
           <button
             @click="filterStatus = null; loadTasks()"
@@ -79,7 +77,6 @@
           </button>
         </div>
 
-        <!-- Lista de Tarefas -->
         <div v-if="loading" class="text-center py-8">
           <p class="text-gray-500">Carregando tarefas...</p>
         </div>
@@ -101,7 +98,6 @@
       </div>
     </div>
 
-    <!-- Modal de Criar/Editar -->
     <TaskModal
       v-if="showCreateModal || editingTask"
       :task="editingTask"

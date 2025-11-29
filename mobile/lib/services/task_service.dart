@@ -8,8 +8,8 @@ import '../models/task.dart';
 import 'auth_service.dart';
 
 class TaskService {
-  static const String baseUrl = 'http://localhost:3000'; // Para Android Emulator
-  // Para iOS Simulator ou dispositivo físico, use: 'http://localhost:3002' ou seu IP local
+  static const String baseUrl = 'http://localhost:3000';
+  
   final AuthService _authService = AuthService();
 
   Future<List<Task>> fetchTasks({String? search, TaskStatus? status}) async {
@@ -143,14 +143,11 @@ class TaskService {
         Uri.parse('$baseUrl/tasks/$taskId/upload'),
       );
       
-      // Adicionar headers de autenticação (não incluir Content-Type para multipart)
       if (headers.containsKey('Authorization')) {
         request.headers['Authorization'] = headers['Authorization']!;
       }
 
-      // Adicionar arquivo baseado na plataforma
       if (kIsWeb && fileBytes != null) {
-        // Web: usar bytes
         request.files.add(
           http.MultipartFile.fromBytes(
             'arquivo',
@@ -159,7 +156,6 @@ class TaskService {
           ),
         );
       } else if (file != null) {
-        // Mobile: usar path
         request.files.add(
           await http.MultipartFile.fromPath(
             'arquivo',
@@ -175,7 +171,6 @@ class TaskService {
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        // Backend retorna a tarefa diretamente
         final taskData = json.decode(response.body) as Map<String, dynamic>;
         return Task.fromJson(taskData);
       } else if (response.statusCode == 404) {

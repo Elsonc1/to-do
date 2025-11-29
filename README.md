@@ -6,10 +6,10 @@ Aplicação completa de gestão de tarefas composta por Backend API REST, Interf
 
 ```
 to-do/
-├── backend/        # API REST (Node.js + Express + TypeScript + TypeORM + PostgreSQL)
-├── web/            # Interface Web (Nuxt 4 com SSR)
-├── mobile/         # App Mobile (Flutter)
-└── README.md       # Este arquivo
+├── backend/
+├── web/
+├── mobile/
+└── README.md
 ```
 
 ## Tecnologias Utilizadas

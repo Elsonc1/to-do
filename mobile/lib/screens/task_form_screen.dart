@@ -51,7 +51,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
 
       try {
         if (widget.task != null) {
-          // Atualizar tarefa existente
           final updatedTask = await _taskService.updateTask(
             id: widget.task!.id,
             titulo: _tituloController.text,
@@ -60,8 +59,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 : _descricaoController.text,
             status: _selectedStatus,
           );
-          
-          // Se houver arquivo selecionado, fazer upload
           if (_selectedFile != null || _fileBytes != null) {
             await _taskService.uploadFile(
               updatedTask.id,
@@ -71,7 +68,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
             );
           }
         } else {
-          // Criar nova tarefa
           final newTask = await _taskService.createTask(
             titulo: _tituloController.text,
             descricao: _descricaoController.text.isEmpty
@@ -80,7 +76,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
             status: _selectedStatus,
           );
           
-          // Se houver arquivo selecionado, fazer upload
           if (_selectedFile != null || _fileBytes != null) {
             await _taskService.uploadFile(
               newTask.id,
@@ -125,11 +120,9 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         final pickedFile = result.files.single;
         setState(() {
           if (kIsWeb) {
-            // Na web, usar bytes
             _fileBytes = pickedFile.bytes;
             _selectedFile = null;
           } else {
-            // No mobile, usar path
             if (pickedFile.path != null) {
               _selectedFile = File(pickedFile.path!);
               _fileBytes = null;
@@ -184,7 +177,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                     maxLines: 4,
                   ),
                   const SizedBox(height: 16),
-                  // Upload de arquivo (ao criar ou editar)
                   OutlinedButton.icon(
                     onPressed: _pickFile,
                     icon: const Icon(Icons.attach_file),

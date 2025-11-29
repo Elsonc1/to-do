@@ -62,15 +62,11 @@ export class TaskService {
       return null;
     }
 
-    // Se o status foi alterado para concluída, definir data_conclusao
     if (data.status === TaskStatus.CONCLUIDA && task.status !== TaskStatus.CONCLUIDA) {
       task.dataConclusao = new Date();
     } else if (data.status && data.status !== TaskStatus.CONCLUIDA && task.status === TaskStatus.CONCLUIDA) {
-      // Se mudou de concluída para outro status, limpar data_conclusao
       task.dataConclusao = undefined;
     }
-
-    // Atualizar apenas os campos fornecidos
     if (data.titulo !== undefined) {
       task.titulo = data.titulo;
     }

@@ -2,7 +2,7 @@
 
 API REST desenvolvida com Node.js, Express, TypeScript e TypeORM para gestão de tarefas.
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Node.js 22+**
 - **Express** - Framework web para Node.js
@@ -11,25 +11,25 @@ API REST desenvolvida com Node.js, Express, TypeScript e TypeORM para gestão de
 - **PostgreSQL** - Banco de dados relacional
 - **Docker** - Containerização da aplicação
 
-## 📋 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 backend/
 ├── src/
-│   ├── entity/          # Entidades do banco de dados
-│   ├── controller/      # Controladores das rotas
-│   ├── service/         # Lógica de negócio
-│   ├── routes/          # Definição das rotas
-│   ├── migration/       # Migrações do banco de dados
-│   ├── data-source.ts   # Configuração do TypeORM
-│   └── server.ts        # Arquivo principal
-├── dist/                # Código compilado (gerado)
+│   ├── entity/
+│   ├── controller/
+│   ├── service/
+│   ├── routes/
+│   ├── migration/
+│   ├── data-source.ts
+│   └── server.ts
+├── dist/
 ├── Dockerfile
 ├── docker-compose.yml
 └── package.json
 ```
 
-## 🔧 Instalação e Configuração
+## Instalação e Configuração
 
 ### Pré-requisitos
 
@@ -49,7 +49,7 @@ backend/
    npm install
    ```
    
-   ⚠️ **IMPORTANTE:** Se você receber erro `'tsx' não é reconhecido`, significa que as dependências não foram instaladas. Execute `npm install` primeiro!
+   **IMPORTANTE:** Se você receber erro `'tsx' não é reconhecido`, significa que as dependências não foram instaladas. Execute `npm install` primeiro!
 
 3. **Configure as variáveis de ambiente:**
    
@@ -118,7 +118,7 @@ backend/
    docker-compose down
    ```
 
-## 📡 Endpoints da API
+## Endpoints da API
 
 ### Base URL
 ```
@@ -173,7 +173,7 @@ http://localhost:3000
 - **DELETE** `/tasks/{id}`
 - **Resposta:** Status 204 (sem conteúdo)
 
-## 📊 Modelo de Dados
+## Modelo de Dados
 
 ### Tarefa (Task)
 
@@ -186,7 +186,7 @@ http://localhost:3000
 | `data_criacao` | Timestamp | Data de criação (automático) |
 | `data_conclusao` | Timestamp | Data de conclusão (apenas quando status = concluida) |
 
-## 🛠️ Scripts Disponíveis
+## Scripts Disponíveis
 
 - `npm run dev` - Inicia o servidor em modo desenvolvimento com hot-reload
 - `npm run build` - Compila o TypeScript para JavaScript
@@ -195,7 +195,7 @@ http://localhost:3000
 - `npm run migration:run` - Executa as migrações pendentes
 - `npm run migration:revert` - Reverte a última migração
 
-## 🔍 Testando a API
+## Testando a API
 
 Você pode testar a API usando ferramentas como:
 - **Postman**
@@ -226,7 +226,7 @@ curl -X PUT http://localhost:3000/tasks/{id} \
 curl -X DELETE http://localhost:3000/tasks/{id}
 ```
 
-## 📝 Observações
+## Observações
 
 - A API define automaticamente `data_conclusao` quando o status é alterado para `concluida`
 - O campo `data_conclusao` é limpo se o status mudar de `concluida` para outro

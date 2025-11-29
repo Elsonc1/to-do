@@ -13,14 +13,14 @@
           class="text-blue-600 hover:text-blue-800 transition-colors"
           title="Editar"
         >
-          ✏️
+          Editar
         </button>
         <button
           @click="$emit('delete', task.id)"
           class="text-red-600 hover:text-red-800 transition-colors"
           title="Excluir"
         >
-          🗑️
+          Excluir
         </button>
       </div>
     </div>
@@ -33,7 +33,7 @@
         target="_blank"
         class="text-blue-600 hover:text-blue-800 text-sm underline flex items-center gap-1"
       >
-        📎 Anexo disponível
+        Anexo disponível
       </a>
     </div>
 

@@ -142,7 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // Busca
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -166,8 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     : null,
               ),
               onChanged: (value) {
-                setState(() {}); // Atualizar UI para mostrar/ocultar botão clear
-                // Debounce para evitar muitas requisições
+                setState(() {});
                 Future.delayed(const Duration(milliseconds: 500), () {
                   if (mounted && _searchController.text == value) {
                     _loadTasks();
@@ -176,7 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-          // Filtros
           Container(
             padding: const EdgeInsets.all(8),
             child: Row(
@@ -190,7 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const Divider(),
-          // Lista de tarefas
           Expanded(
             child: _loading
                 ? const Center(child: CircularProgressIndicator())

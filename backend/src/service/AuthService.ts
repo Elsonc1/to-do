@@ -23,7 +23,6 @@ export class AuthService {
   }
 
   async register(data: RegisterDTO): Promise<{ user: User; token: string }> {
-    // Verificar se email já existe
     const existingUser = await this.userRepository.findOne({
       where: { email: data.email }
     });
@@ -32,10 +31,8 @@ export class AuthService {
       throw new Error('Email já está em uso');
     }
 
-    // Hash da senha
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    // Criar usuário
     const user = this.userRepository.create({
       email: data.email,
       password: hashedPassword,
@@ -44,10 +41,7 @@ export class AuthService {
 
     await this.userRepository.save(user);
 
-    // Gerar token
     const token = this.generateToken(user.id);
-
-    // Remover senha do objeto retornado
     const { password, ...userWithoutPassword } = user;
 
     return {
@@ -57,7 +51,6 @@ export class AuthService {
   }
 
   async login(data: LoginDTO): Promise<{ user: User; token: string }> {
-    // Buscar usuário
     const user = await this.userRepository.findOne({
       where: { email: data.email }
     });
@@ -66,17 +59,13 @@ export class AuthService {
       throw new Error('Email ou senha inválidos');
     }
 
-    // Verificar senha
     const isValidPassword = await bcrypt.compare(data.password, user.password);
 
     if (!isValidPassword) {
       throw new Error('Email ou senha inválidos');
     }
 
-    // Gerar token
     const token = this.generateToken(user.id);
-
-    // Remover senha do objeto retornado
     const { password, ...userWithoutPassword } = user;
 
     return {

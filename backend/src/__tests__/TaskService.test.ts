@@ -2,7 +2,6 @@ import { TaskService } from '../service/TaskService';
 import { AppDataSource } from '../data-source';
 import { Task, TaskStatus } from '../entity/Task';
 
-// Mock do TypeORM
 jest.mock('../data-source', () => ({
   AppDataSource: {
     getRepository: jest.fn(),

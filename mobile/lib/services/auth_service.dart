@@ -28,7 +28,6 @@ class AuthService {
         final responseData = json.decode(response.body) as Map<String, dynamic>;
         final authResponse = AuthResponse.fromJson(responseData);
         
-        // Salvar token e usuário
         await _saveAuth(authResponse.token, authResponse.user);
         
         return authResponse;
@@ -59,7 +58,6 @@ class AuthService {
         final responseData = json.decode(response.body) as Map<String, dynamic>;
         final authResponse = AuthResponse.fromJson(responseData);
         
-        // Salvar token e usuário
         await _saveAuth(authResponse.token, authResponse.user);
         
         return authResponse;

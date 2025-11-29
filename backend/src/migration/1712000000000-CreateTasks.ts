@@ -2,7 +2,6 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateTasks1712000000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Criar tipo enum para status apenas se não existir
     await queryRunner.query(`
       DO $$ BEGIN
         CREATE TYPE task_status_enum AS ENUM ('pendente', 'em_andamento', 'concluida');

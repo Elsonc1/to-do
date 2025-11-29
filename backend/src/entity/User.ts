@@ -9,7 +9,7 @@ export class User {
   email!: string;
 
   @Column({ type: 'varchar', length: 255 })
-  password!: string; // Será hash da senha
+  password!: string;
 
   @Column({ type: 'varchar', length: 255 })
   nome!: string;

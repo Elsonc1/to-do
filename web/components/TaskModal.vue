@@ -137,16 +137,12 @@ const handleSubmit = async () => {
     let savedTask: Task;
     
     if (props.task) {
-      // Atualizar tarefa existente
       savedTask = await updateTask(props.task.id, form.value);
-      // Se houver arquivo selecionado, fazer upload
       if (selectedFile.value) {
         await uploadFile(savedTask.id, selectedFile.value);
       }
     } else {
-      // Criar nova tarefa
       savedTask = await createTask(form.value as CreateTaskDTO);
-      // Se houver arquivo selecionado, fazer upload na tarefa recém-criada
       if (selectedFile.value && savedTask.id) {
         await uploadFile(savedTask.id, selectedFile.value);
       }

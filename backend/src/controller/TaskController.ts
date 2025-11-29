@@ -114,20 +114,16 @@ export class TaskController {
         return;
       }
 
-      // Atualizar tarefa com o caminho do arquivo
       const fileUrl = `/uploads/${file.filename}`;
       const task = await this.taskService.update(id, {
         arquivo: fileUrl
       });
 
       if (!task) {
-        // Se a tarefa não existe, deletar o arquivo enviado
         fs.unlinkSync(file.path);
         res.status(404).json({ error: 'Tarefa não encontrada' });
         return;
       }
-
-      // Se havia um arquivo anterior, deletá-lo
       if (task.arquivo && task.arquivo !== fileUrl) {
         const oldFilePath = path.join(__dirname, '../..', task.arquivo);
         if (fs.existsSync(oldFilePath)) {
@@ -139,7 +135,6 @@ export class TaskController {
     } catch (error: any) {
       console.error('Erro ao fazer upload:', error);
       
-      // Deletar arquivo se houver erro
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }

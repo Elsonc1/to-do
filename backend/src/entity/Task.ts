@@ -31,6 +31,6 @@ export class Task {
   dataConclusao?: Date;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  arquivo?: string; // URL ou caminho do arquivo
+  arquivo?: string;
 }
 

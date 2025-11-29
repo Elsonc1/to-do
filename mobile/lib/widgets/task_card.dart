@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/task.dart';
+import '../services/task_service.dart';
 
 Color _getStatusColor(TaskStatus status) {
   switch (status) {
@@ -71,18 +73,22 @@ class TaskCard extends StatelessWidget {
             ],
             if (task.arquivo != null && task.arquivo!.isNotEmpty) ...[
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  const Icon(Icons.attach_file, size: 16, color: Colors.blue),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Anexo disponível',
-                    style: TextStyle(
-                      color: Colors.blue.shade700,
-                      fontSize: 12,
+              InkWell(
+                onTap: () => _openFile(context, task.arquivo!),
+                child: Row(
+                  children: [
+                    const Icon(Icons.attach_file, size: 16, color: Colors.blue),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Ver anexo',
+                      style: TextStyle(
+                        color: Colors.blue.shade700,
+                        fontSize: 12,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
             const SizedBox(height: 12),
@@ -137,6 +143,44 @@ class TaskCard extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     return DateFormat('dd/MM/yyyy HH:mm').format(date);
+  }
+
+  Future<void> _openFile(BuildContext context, String arquivo) async {
+    try {
+      String fileUrl;
+      if (arquivo.startsWith('http://') || arquivo.startsWith('https://')) {
+        fileUrl = arquivo;
+      } else {
+        fileUrl = '${TaskService.baseUrl}$arquivo';
+      }
+
+      final Uri url = Uri.parse(fileUrl);
+      
+      if (await canLaunchUrl(url)) {
+        await launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Não foi possível abrir o arquivo'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao abrir arquivo: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
 
