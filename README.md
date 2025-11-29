@@ -59,7 +59,7 @@ to-do/
 - Filtros por status
 - Pull-to-refresh
 
-## 📡 API Endpoints
+## API Endpoints
 
 A API backend expõe os seguintes endpoints:
 
@@ -92,7 +92,7 @@ Após iniciar os serviços:
 - **Interface Web:** http://localhost:3000 (ou porta configurada no Nuxt)
 - **Health Check:** http://localhost:3000/health
 
-## 📝 Notas Importantes
+## Notas Importantes
 
 1. **Backend:** Certifique-se de ter o PostgreSQL rodando ou use Docker Compose
 2. **Web:** A URL da API é configurável via variável de ambiente `API_BASE_URL`
@@ -115,11 +115,6 @@ Consulte `web/env.example`
 - [Backend README](./backend/README.md) - Documentação completa do backend
 - [Web README](./web/README.md) - Documentação completa da interface web
 - [Mobile README](./mobile/README.md) - Documentação completa do app mobile
-
-### Guias de Teste
-- [⚡ Comandos Rápidos](./COMANDOS_RAPIDOS.md) - Comandos essenciais para testar
-- [🚀 Comandos Completos](./COMANDOS_TESTAR.md) - Guia detalhado de comandos
-- [✅ Testar Extras](./TESTAR_EXTRAS.md) - Como testar as funcionalidades extras
 
 ## Arquitetura
 
