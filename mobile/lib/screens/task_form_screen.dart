@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import '../models/task.dart';
 import '../services/task_service.dart';
 
@@ -18,6 +20,8 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
   TaskStatus _selectedStatus = TaskStatus.pendente;
   final TaskService _taskService = TaskService();
   bool _loading = false;
+  File? _selectedFile;
+  String? _fileName;
 
   @override
   void initState() {
@@ -45,7 +49,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
       try {
         if (widget.task != null) {
           // Atualizar tarefa existente
-          await _taskService.updateTask(
+          final updatedTask = await _taskService.updateTask(
             id: widget.task!.id,
             titulo: _tituloController.text,
             descricao: _descricaoController.text.isEmpty
@@ -53,15 +57,25 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 : _descricaoController.text,
             status: _selectedStatus,
           );
+          
+          // Se houver arquivo selecionado, fazer upload
+          if (_selectedFile != null) {
+            await _taskService.uploadFile(updatedTask.id, _selectedFile!);
+          }
         } else {
           // Criar nova tarefa
-          await _taskService.createTask(
+          final newTask = await _taskService.createTask(
             titulo: _tituloController.text,
             descricao: _descricaoController.text.isEmpty
                 ? null
                 : _descricaoController.text,
             status: _selectedStatus,
           );
+          
+          // Se houver arquivo selecionado, fazer upload
+          if (_selectedFile != null) {
+            await _taskService.uploadFile(newTask.id, _selectedFile!);
+          }
         }
 
         if (mounted) {
@@ -83,6 +97,28 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
             SnackBar(content: Text('Erro ao salvar tarefa: $e')),
           );
         }
+      }
+    }
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'txt'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        setState(() {
+          _selectedFile = File(result.files.single.path!);
+          _fileName = result.files.single.name;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao selecionar arquivo: $e')),
+        );
       }
     }
   }
@@ -124,6 +160,22 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                     maxLines: 4,
                   ),
                   const SizedBox(height: 16),
+                  if (widget.task != null) ...[
+                    // Upload de arquivo (apenas ao editar)
+                    OutlinedButton.icon(
+                      onPressed: _pickFile,
+                      icon: const Icon(Icons.attach_file),
+                      label: Text(_fileName ?? 'Anexar arquivo'),
+                    ),
+                    if (_fileName != null) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        'Arquivo selecionado: $_fileName',
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                    const SizedBox(height: 16),
+                  ],
                   DropdownButtonFormField<TaskStatus>(
                     value: _selectedStatus,
                     decoration: const InputDecoration(

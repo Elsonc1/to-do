@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:path/path.dart' as path;
 import '../models/task.dart';
+import 'auth_service.dart';
 
 class TaskService {
   static const String baseUrl = 'http://localhost:3000'; // Para Android Emulator
   // Para iOS Simulator ou dispositivo físico, use: 'http://localhost:3002' ou seu IP local
+  final AuthService _authService = AuthService();
 
   Future<List<Task>> fetchTasks({String? search, TaskStatus? status}) async {
     try {
@@ -17,7 +21,8 @@ class TaskService {
       }
 
       final uri = Uri.parse('$baseUrl/tasks').replace(queryParameters: queryParams);
-      final response = await http.get(uri);
+      final headers = await _authService.getAuthHeaders();
+      final response = await http.get(uri, headers: headers);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -32,7 +37,8 @@ class TaskService {
 
   Future<Task> fetchTask(String id) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/tasks/$id'));
+      final headers = await _authService.getAuthHeaders();
+      final response = await http.get(Uri.parse('$baseUrl/tasks/$id'), headers: headers);
 
       if (response.statusCode == 200) {
         return Task.fromJson(json.decode(response.body));
@@ -52,9 +58,10 @@ class TaskService {
     TaskStatus status = TaskStatus.pendente,
   }) async {
     try {
+      final headers = await _authService.getAuthHeaders();
       final response = await http.post(
         Uri.parse('$baseUrl/tasks'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
         body: json.encode({
           'titulo': titulo,
           'descricao': descricao,
@@ -85,9 +92,10 @@ class TaskService {
       if (descricao != null) body['descricao'] = descricao;
       if (status != null) body['status'] = status.value;
 
+      final headers = await _authService.getAuthHeaders();
       final response = await http.put(
         Uri.parse('$baseUrl/tasks/$id'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
         body: json.encode(body),
       );
 
@@ -105,7 +113,8 @@ class TaskService {
 
   Future<void> deleteTask(String id) async {
     try {
-      final response = await http.delete(Uri.parse('$baseUrl/tasks/$id'));
+      final headers = await _authService.getAuthHeaders();
+      final response = await http.delete(Uri.parse('$baseUrl/tasks/$id'), headers: headers);
 
       if (response.statusCode == 204) {
         return;
@@ -118,5 +127,42 @@ class TaskService {
       throw Exception('Erro ao excluir tarefa: $e');
     }
   }
-}
 
+  Future<Task> uploadFile(String taskId, File file) async {
+    try {
+      final headers = await _authService.getAuthHeaders();
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$baseUrl/tasks/$taskId/upload'),
+      );
+      
+      // Adicionar headers de autenticação (não incluir Content-Type para multipart)
+      if (headers.containsKey('Authorization')) {
+        request.headers['Authorization'] = headers['Authorization']!;
+      }
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'arquivo',
+          file.path,
+          filename: path.basename(file.path),
+        ),
+      );
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        // Backend retorna a tarefa diretamente
+        final taskData = json.decode(response.body) as Map<String, dynamic>;
+        return Task.fromJson(taskData);
+      } else if (response.statusCode == 404) {
+        throw Exception('Tarefa não encontrada');
+      } else {
+        throw Exception('Falha ao fazer upload: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Erro ao fazer upload: $e');
+    }
+  }
+}

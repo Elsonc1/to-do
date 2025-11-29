@@ -69,6 +69,22 @@ class TaskCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.grey),
               ),
             ],
+            if (task.arquivo != null && task.arquivo!.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Icon(Icons.attach_file, size: 16, color: Colors.blue),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Anexo disponível',
+                    style: TextStyle(
+                      color: Colors.blue.shade700,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 12),
             Row(
               children: [
