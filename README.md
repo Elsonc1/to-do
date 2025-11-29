@@ -90,15 +90,6 @@ Após iniciar os serviços:
 - **Interface Web:** http://localhost:3000 (ou porta configurada no Nuxt)
 - **Health Check:** http://localhost:3000/health
 
-## Notas Importantes
-
-1. **Backend:** Certifique-se de ter o PostgreSQL rodando ou use Docker Compose
-2. **Web:** A URL da API é configurável via variável de ambiente `API_BASE_URL`
-3. **Mobile:** Configure a URL da API no arquivo `task_service.dart` conforme seu ambiente:
-   - Android Emulator: `http://10.0.2.2:3000`
-   - iOS Simulator: `http://localhost:3000`
-   - Dispositivo físico: `http://SEU_IP_LOCAL:3000`
-
 ## Variáveis de Ambiente
 
 ### Backend
