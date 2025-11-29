@@ -4,12 +4,20 @@
       <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex justify-between items-center mb-6">
           <h1 class="text-3xl font-bold text-gray-800">Minhas Tarefas</h1>
-          <button
-            @click="showCreateModal = true"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-          >
-            + Nova Tarefa
-          </button>
+          <div class="flex gap-2">
+            <button
+              @click="showCreateModal = true"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              + Nova Tarefa
+            </button>
+            <button
+              @click="handleLogout"
+              class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              Sair
+            </button>
+          </div>
         </div>
 
         <!-- Busca -->
@@ -106,9 +114,12 @@
 <script setup lang="ts">
 import { Task } from '~/composables/useTasks';
 
-// Layout será aplicado automaticamente via NuxtLayout no app.vue
+definePageMeta({
+  middleware: 'auth'
+});
 
 const { fetchTasks, deleteTask, updateTask } = useTasks();
+const { logout } = useAuth();
 
 const tasks = ref<Task[]>([]);
 const loading = ref(true);
@@ -177,6 +188,10 @@ const handleSave = async () => {
 const closeModal = () => {
   showCreateModal.value = false;
   editingTask.value = null;
+};
+
+const handleLogout = () => {
+  logout();
 };
 
 onMounted(() => {

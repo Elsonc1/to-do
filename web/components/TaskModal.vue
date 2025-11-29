@@ -56,6 +56,24 @@
           </select>
         </div>
 
+        <div v-if="props.task">
+          <label for="arquivo" class="block text-sm font-medium text-gray-700 mb-1">
+            Anexar Arquivo
+          </label>
+          <input
+            id="arquivo"
+            type="file"
+            @change="handleFileChange"
+            accept="image/*,.pdf,.doc,.docx,.txt"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <p v-if="props.task.arquivo" class="text-sm text-blue-600 mt-1">
+            <a :href="getFileUrl(props.task.arquivo)" target="_blank" class="underline">
+              Ver arquivo atual
+            </a>
+          </p>
+        </div>
+
         <div class="flex gap-3 pt-4">
           <button
             type="button"
@@ -88,7 +106,8 @@ const emit = defineEmits<{
   save: [];
 }>();
 
-const { createTask, updateTask } = useTasks();
+const { createTask, updateTask, uploadFile } = useTasks();
+const config = useRuntimeConfig();
 
 const form = ref<CreateTaskDTO | UpdateTaskDTO>({
   titulo: props.task?.titulo || '',
@@ -96,10 +115,28 @@ const form = ref<CreateTaskDTO | UpdateTaskDTO>({
   status: props.task?.status || 'pendente'
 });
 
+const selectedFile = ref<File | null>(null);
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    selectedFile.value = target.files[0];
+  }
+};
+
+const getFileUrl = (arquivo: string) => {
+  const apiBase = config.public.apiBase;
+  return arquivo.startsWith('http') ? arquivo : `${apiBase}${arquivo}`;
+};
+
 const handleSubmit = async () => {
   try {
     if (props.task) {
       await updateTask(props.task.id, form.value);
+      // Se houver arquivo selecionado, fazer upload
+      if (selectedFile.value) {
+        await uploadFile(props.task.id, selectedFile.value);
+      }
     } else {
       await createTask(form.value as CreateTaskDTO);
     }

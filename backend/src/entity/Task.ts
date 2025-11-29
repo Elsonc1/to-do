@@ -29,5 +29,8 @@ export class Task {
 
   @Column({ name: 'data_conclusao', type: 'timestamp', nullable: true })
   dataConclusao?: Date;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  arquivo?: string; // URL ou caminho do arquivo
 }
 

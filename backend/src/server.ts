@@ -2,8 +2,10 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
+import path from 'path';
 import { AppDataSource } from './data-source';
 import taskRoutes from './routes/taskRoutes';
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
@@ -15,13 +17,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Servir arquivos estáticos (uploads)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'API está funcionando' });
 });
 
 // Routes
-app.use('/', taskRoutes);
+app.use('/', authRoutes); // Rotas de autenticação (públicas)
+app.use('/', taskRoutes); // Rotas de tarefas
 
 // Inicializar banco de dados e servidor
 AppDataSource.initialize()

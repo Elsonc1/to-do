@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Task } from './entity/Task';
+import { User } from './entity/User';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'todo_db',
   synchronize: false, // Sempre use migrações
   logging: process.env.NODE_ENV === 'development',
-  entities: [Task],
+  entities: [Task, User],
   migrations: ['dist/migration/**/*.js'],
   migrationsTableName: 'migrations'
 });

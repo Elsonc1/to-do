@@ -5,6 +5,7 @@ class Task {
   final TaskStatus status;
   final DateTime dataCriacao;
   final DateTime? dataConclusao;
+  final String? arquivo;
 
   Task({
     required this.id,
@@ -13,6 +14,7 @@ class Task {
     required this.status,
     required this.dataCriacao,
     this.dataConclusao,
+    this.arquivo,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class Task {
       dataConclusao: json['data_conclusao'] != null
           ? DateTime.parse(json['data_conclusao'] as String)
           : null,
+      arquivo: json['arquivo'] as String?,
     );
   }
 
@@ -45,6 +48,7 @@ class Task {
     TaskStatus? status,
     DateTime? dataCriacao,
     DateTime? dataConclusao,
+    String? arquivo,
   }) {
     return Task(
       id: id ?? this.id,
@@ -53,6 +57,7 @@ class Task {
       status: status ?? this.status,
       dataCriacao: dataCriacao ?? this.dataCriacao,
       dataConclusao: dataConclusao ?? this.dataConclusao,
+      arquivo: arquivo ?? this.arquivo,
     );
   }
 }

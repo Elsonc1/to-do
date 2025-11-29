@@ -5,6 +5,7 @@ export interface Task {
   status: 'pendente' | 'em_andamento' | 'concluida';
   dataCriacao: string;
   dataConclusao?: string;
+  arquivo?: string;
 }
 
 export interface CreateTaskDTO {
@@ -87,12 +88,29 @@ export const useTasks = () => {
     }
   };
 
+  const uploadFile = async (taskId: string, file: File): Promise<Task> => {
+    try {
+      const formData = new FormData();
+      formData.append('arquivo', file);
+
+      const response = await $fetch<Task>(`${apiBase}/tasks/${taskId}/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      return response;
+    } catch (error) {
+      console.error('Erro ao fazer upload:', error);
+      throw error;
+    }
+  };
+
   return {
     fetchTasks,
     fetchTask,
     createTask,
     updateTask,
-    deleteTask
+    deleteTask,
+    uploadFile
   };
 };
 

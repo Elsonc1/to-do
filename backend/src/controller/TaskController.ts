@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { TaskService } from '../service/TaskService';
 import { TaskStatus } from '../entity/Task';
+import path from 'path';
+import fs from 'fs';
 
 export class TaskController {
   private taskService: TaskService;
@@ -101,5 +103,52 @@ export class TaskController {
       res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
-}
 
+  async uploadFile(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const file = req.file;
+
+      if (!file) {
+        res.status(400).json({ error: 'Nenhum arquivo enviado' });
+        return;
+      }
+
+      // Atualizar tarefa com o caminho do arquivo
+      const fileUrl = `/uploads/${file.filename}`;
+      const task = await this.taskService.update(id, {
+        arquivo: fileUrl
+      });
+
+      if (!task) {
+        // Se a tarefa não existe, deletar o arquivo enviado
+        fs.unlinkSync(file.path);
+        res.status(404).json({ error: 'Tarefa não encontrada' });
+        return;
+      }
+
+      // Se havia um arquivo anterior, deletá-lo
+      if (task.arquivo && task.arquivo !== fileUrl) {
+        const oldFilePath = path.join(__dirname, '../..', task.arquivo);
+        if (fs.existsSync(oldFilePath)) {
+          fs.unlinkSync(oldFilePath);
+        }
+      }
+
+      res.json({ ...task, arquivo: fileUrl });
+    } catch (error: any) {
+      console.error('Erro ao fazer upload:', error);
+      
+      // Deletar arquivo se houver erro
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      if (error.message.includes('Tipo de arquivo')) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Erro interno do servidor' });
+      }
+    }
+  }
+}

@@ -27,6 +27,16 @@
 
     <p v-if="task.descricao" class="text-gray-600 mb-3">{{ task.descricao }}</p>
 
+    <div v-if="task.arquivo" class="mb-3">
+      <a
+        :href="getFileUrl(task.arquivo)"
+        target="_blank"
+        class="text-blue-600 hover:text-blue-800 text-sm underline flex items-center gap-1"
+      >
+        📎 Anexo disponível
+      </a>
+    </div>
+
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-4">
         <span :class="['px-3 py-1 rounded-full text-sm font-medium', getStatusBadgeClass(task.status)]">
@@ -67,6 +77,13 @@ const emit = defineEmits<{
   delete: [id: string];
   'update-status': [id: string, status: string];
 }>();
+
+const config = useRuntimeConfig();
+
+const getFileUrl = (arquivo: string) => {
+  const apiBase = config.public.apiBase;
+  return arquivo.startsWith('http') ? arquivo : `${apiBase}${arquivo}`;
+};
 
 const handleStatusChange = (event: Event) => {
   const target = event.target as HTMLSelectElement;

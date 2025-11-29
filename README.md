@@ -2,7 +2,7 @@
 
 Aplicação completa de gestão de tarefas composta por Backend API REST, Interface Web e App Mobile.
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 to-do/
@@ -12,7 +12,7 @@ to-do/
 └── README.md       # Este arquivo
 ```
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 ### Backend
 - Node.js 22+
@@ -33,95 +33,31 @@ to-do/
 - Flutter
 - Dart
 
-## 📋 Funcionalidades
+##Funcionalidades
 
 ### Backend
-- ✅ CRUD completo de tarefas
-- ✅ Endpoints RESTful
-- ✅ Banco de dados PostgreSQL
-- ✅ Migrações de banco de dados
-- ✅ Docker Compose para desenvolvimento
+- CRUD completo de tarefas
+- Endpoints RESTful
+- Banco de dados PostgreSQL
+- Migrações de banco de dados
+- Docker Compose para desenvolvimento
 
 ### Interface Web
-- ✅ Listagem de tarefas
-- ✅ Cadastro e edição
-- ✅ Alteração de status
-- ✅ Exclusão
-- ✅ Filtros por status
-- ✅ Server-Side Rendering (SSR)
-- ✅ Interface moderna e responsiva
+- Listagem de tarefas
+- Cadastro e edição
+- Alteração de status
+- Exclusão
+- Filtros por status
+- Server-Side Rendering (SSR)
+- Interface moderna e responsiva
 
 ### App Mobile
-- ✅ Lista de tarefas
-- ✅ Cadastro e edição
-- ✅ Troca de status
-- ✅ Exclusão
-- ✅ Filtros por status
-- ✅ Pull-to-refresh
-
-## 🛠️ Como Executar
-
-### 📋 Pré-requisitos
-
-**IMPORTANTE:** Antes de começar, você precisa ter instalado:
-
-- **Node.js 22+** (obrigatório para Backend e Web)
-- **Docker Desktop** (opcional, para PostgreSQL) OU **PostgreSQL** local
-- **Flutter SDK** (opcional, apenas para Mobile)
-
-👉 **Consulte [INSTALL_REQUIREMENTS.md](./INSTALL_REQUIREMENTS.md) para instalar os pré-requisitos**
-
-### ⚡ Início Rápido
-
-👉 **Para um guia rápido passo a passo, consulte [QUICK_START.md](./QUICK_START.md)**
-
-### 1. Backend
-
-Consulte o README específico do backend: [backend/README.md](./backend/README.md)
-
-**Resumo rápido:**
-```bash
-cd backend
-npm install
-copy env.example .env
-# Configure o .env
-npm run dev
-```
-
-Ou com Docker:
-```bash
-cd backend
-docker-compose up -d
-```
-
-### 2. Interface Web
-
-Consulte o README específico da web: [web/README.md](./web/README.md)
-
-**Resumo rápido:**
-```bash
-cd web
-npm install
-copy env.example .env
-# Configure o .env se necessário
-npm run dev
-```
-
-### 3. App Mobile
-
-Consulte o README específico do mobile: [mobile/README.md](./mobile/README.md)
-
-**Resumo rápido:**
-```bash
-cd mobile
-flutter pub get
-# Configure a URL da API no task_service.dart
-flutter run
-```
-
-## 🐛 Problemas?
-
-👉 **Consulte [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) para resolver problemas comuns**
+- Lista de tarefas
+- Cadastro e edição
+- Troca de status
+- Exclusão
+- Filtros por status
+- Pull-to-refresh
 
 ## 📡 API Endpoints
 
@@ -148,7 +84,7 @@ A API backend expõe os seguintes endpoints:
 }
 ```
 
-## 🌐 URLs de Acesso
+## URLs de Acesso
 
 Após iniciar os serviços:
 
@@ -165,7 +101,7 @@ Após iniciar os serviços:
    - iOS Simulator: `http://localhost:3000`
    - Dispositivo físico: `http://SEU_IP_LOCAL:3000`
 
-## 🔧 Variáveis de Ambiente
+## Variáveis de Ambiente
 
 ### Backend
 Consulte `backend/env.example`
@@ -173,18 +109,19 @@ Consulte `backend/env.example`
 ### Web
 Consulte `web/env.example`
 
-## 📚 Documentação Adicional
+## Documentação Adicional
 
 ### Documentação dos Projetos
 - [Backend README](./backend/README.md) - Documentação completa do backend
 - [Web README](./web/README.md) - Documentação completa da interface web
 - [Mobile README](./mobile/README.md) - Documentação completa do app mobile
 
-### Review e Checklist
-- [📋 Review de Escopo](./SCOPE_REVIEW.md) - Análise completa de atendimento ao escopo
-- [✅ Checklist de Entrega](./CHECKLIST_ENTREGA.md) - Checklist final antes da entrega
+### Guias de Teste
+- [⚡ Comandos Rápidos](./COMANDOS_RAPIDOS.md) - Comandos essenciais para testar
+- [🚀 Comandos Completos](./COMANDOS_TESTAR.md) - Guia detalhado de comandos
+- [✅ Testar Extras](./TESTAR_EXTRAS.md) - Como testar as funcionalidades extras
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ### Backend
 - Arquitetura em camadas (Controller → Service → Repository)
@@ -200,8 +137,3 @@ Consulte `web/env.example`
 - Arquitetura baseada em widgets Flutter
 - Service layer para comunicação com API
 - Models para tipagem de dados
-
-## 📄 Licença
-
-MIT
-

@@ -13,6 +13,7 @@ interface UpdateTaskDTO {
   descricao?: string;
   status?: TaskStatus;
   dataConclusao?: Date;
+  arquivo?: string;
 }
 
 export class TaskService {
@@ -78,6 +79,9 @@ export class TaskService {
     }
     if (data.status !== undefined) {
       task.status = data.status;
+    }
+    if (data.arquivo !== undefined) {
+      task.arquivo = data.arquivo;
     }
     
     return await this.taskRepository.save(task);
