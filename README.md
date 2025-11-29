@@ -33,8 +33,6 @@ to-do/
 - Flutter
 - Dart
 
-##Funcionalidades
-
 ### Backend
 - CRUD completo de tarefas
 - Endpoints RESTful

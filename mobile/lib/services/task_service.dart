@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:path/path.dart' as path;
 import '../models/task.dart';
 import 'auth_service.dart';
@@ -128,7 +130,12 @@ class TaskService {
     }
   }
 
-  Future<Task> uploadFile(String taskId, File file) async {
+  Future<Task> uploadFile(
+    String taskId, {
+    File? file,
+    Uint8List? fileBytes,
+    required String fileName,
+  }) async {
     try {
       final headers = await _authService.getAuthHeaders();
       final request = http.MultipartRequest(
@@ -141,13 +148,28 @@ class TaskService {
         request.headers['Authorization'] = headers['Authorization']!;
       }
 
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'arquivo',
-          file.path,
-          filename: path.basename(file.path),
-        ),
-      );
+      // Adicionar arquivo baseado na plataforma
+      if (kIsWeb && fileBytes != null) {
+        // Web: usar bytes
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'arquivo',
+            fileBytes,
+            filename: fileName,
+          ),
+        );
+      } else if (file != null) {
+        // Mobile: usar path
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'arquivo',
+            file.path,
+            filename: fileName,
+          ),
+        );
+      } else {
+        throw Exception('Arquivo não fornecido');
+      }
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);

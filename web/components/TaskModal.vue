@@ -56,9 +56,9 @@
           </select>
         </div>
 
-        <div v-if="props.task">
+        <div>
           <label for="arquivo" class="block text-sm font-medium text-gray-700 mb-1">
-            Anexar Arquivo
+            Anexar Arquivo (opcional)
           </label>
           <input
             id="arquivo"
@@ -67,7 +67,10 @@
             accept="image/*,.pdf,.doc,.docx,.txt"
             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <p v-if="props.task.arquivo" class="text-sm text-blue-600 mt-1">
+          <p v-if="selectedFile" class="text-sm text-gray-600 mt-1">
+            Arquivo selecionado: {{ selectedFile.name }}
+          </p>
+          <p v-if="props.task?.arquivo" class="text-sm text-blue-600 mt-1">
             <a :href="getFileUrl(props.task.arquivo)" target="_blank" class="underline">
               Ver arquivo atual
             </a>
@@ -131,17 +134,26 @@ const getFileUrl = (arquivo: string) => {
 
 const handleSubmit = async () => {
   try {
+    let savedTask: Task;
+    
     if (props.task) {
-      await updateTask(props.task.id, form.value);
+      // Atualizar tarefa existente
+      savedTask = await updateTask(props.task.id, form.value);
       // Se houver arquivo selecionado, fazer upload
       if (selectedFile.value) {
-        await uploadFile(props.task.id, selectedFile.value);
+        await uploadFile(savedTask.id, selectedFile.value);
       }
     } else {
-      await createTask(form.value as CreateTaskDTO);
+      // Criar nova tarefa
+      savedTask = await createTask(form.value as CreateTaskDTO);
+      // Se houver arquivo selecionado, fazer upload na tarefa recém-criada
+      if (selectedFile.value && savedTask.id) {
+        await uploadFile(savedTask.id, selectedFile.value);
+      }
     }
     emit('save');
   } catch (error) {
+    console.error('Erro ao salvar tarefa:', error);
     alert('Erro ao salvar tarefa');
   }
 };

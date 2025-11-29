@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import '../models/task.dart';
 import '../services/task_service.dart';
@@ -22,6 +24,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
   bool _loading = false;
   File? _selectedFile;
   String? _fileName;
+  Uint8List? _fileBytes; // Para web
 
   @override
   void initState() {
@@ -59,8 +62,13 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
           );
           
           // Se houver arquivo selecionado, fazer upload
-          if (_selectedFile != null) {
-            await _taskService.uploadFile(updatedTask.id, _selectedFile!);
+          if (_selectedFile != null || _fileBytes != null) {
+            await _taskService.uploadFile(
+              updatedTask.id,
+              file: _selectedFile,
+              fileBytes: _fileBytes,
+              fileName: _fileName ?? 'arquivo',
+            );
           }
         } else {
           // Criar nova tarefa
@@ -73,8 +81,13 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
           );
           
           // Se houver arquivo selecionado, fazer upload
-          if (_selectedFile != null) {
-            await _taskService.uploadFile(newTask.id, _selectedFile!);
+          if (_selectedFile != null || _fileBytes != null) {
+            await _taskService.uploadFile(
+              newTask.id,
+              file: _selectedFile,
+              fileBytes: _fileBytes,
+              fileName: _fileName ?? 'arquivo',
+            );
           }
         }
 
@@ -108,10 +121,21 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'txt'],
       );
 
-      if (result != null && result.files.single.path != null) {
+      if (result != null) {
+        final pickedFile = result.files.single;
         setState(() {
-          _selectedFile = File(result.files.single.path!);
-          _fileName = result.files.single.name;
+          if (kIsWeb) {
+            // Na web, usar bytes
+            _fileBytes = pickedFile.bytes;
+            _selectedFile = null;
+          } else {
+            // No mobile, usar path
+            if (pickedFile.path != null) {
+              _selectedFile = File(pickedFile.path!);
+              _fileBytes = null;
+            }
+          }
+          _fileName = pickedFile.name;
         });
       }
     } catch (e) {
@@ -160,22 +184,20 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                     maxLines: 4,
                   ),
                   const SizedBox(height: 16),
-                  if (widget.task != null) ...[
-                    // Upload de arquivo (apenas ao editar)
-                    OutlinedButton.icon(
-                      onPressed: _pickFile,
-                      icon: const Icon(Icons.attach_file),
-                      label: Text(_fileName ?? 'Anexar arquivo'),
+                  // Upload de arquivo (ao criar ou editar)
+                  OutlinedButton.icon(
+                    onPressed: _pickFile,
+                    icon: const Icon(Icons.attach_file),
+                    label: Text(_fileName ?? 'Anexar arquivo (opcional)'),
+                  ),
+                  if (_fileName != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'Arquivo selecionado: $_fileName',
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
-                    if (_fileName != null) ...[
-                      const SizedBox(height: 8),
-                      Text(
-                        'Arquivo selecionado: $_fileName',
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ],
-                    const SizedBox(height: 16),
                   ],
+                  const SizedBox(height: 16),
                   DropdownButtonFormField<TaskStatus>(
                     value: _selectedStatus,
                     decoration: const InputDecoration(
